@@ -18,15 +18,12 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import android.content.Intent
 
-const val MY_REQUEST_CODE = 0
-
-class MainActivity : RxAppCompatActivity() {
+class ArticleListActivity : RxAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_article_list)
 
 
         // 一覧表示用リスト
@@ -38,8 +35,6 @@ class MainActivity : RxAppCompatActivity() {
         // 検索ボタン
         val queryEditText = findViewById(R.id.query_edit_text) as EditText
         val searchButton = findViewById(R.id.search_button) as Button
-        // 移動ボタン
-        val moveButton = findViewById(R.id.move_button) as Button
 
         // 記事一覧用アダプタ
         val listAdapter = ArticleListAdapter(applicationContext)
@@ -91,16 +86,6 @@ class MainActivity : RxAppCompatActivity() {
                     }, {
                         toast("エラー：$it")
                     })
-        }
-
-        // 移動ボタン
-        moveButton.setOnClickListener{
-            val intent: Intent = Intent(this, ArticleListActivity::class.java)
-            intent.putExtra("number", 120)
-            intent.putExtra("string", "The message from MainActivity")
-
-            // 新しくアクティビティを開く
-            startActivityForResult(intent, MY_REQUEST_CODE)
         }
 
 

@@ -21,6 +21,9 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ArticleListActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ArticleActivity" />
 
     </application>
