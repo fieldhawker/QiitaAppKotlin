@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.product.hawker.qiitaappkotlin.R
 import com.product.hawker.qiitaappkotlin.model.Article
 import com.product.hawker.qiitaappkotlin.bindView
@@ -42,6 +43,7 @@ class ArticleView : FrameLayout {
         titleTextView.text = article.title
         userNameTextView.text = article.user.name
 
-        profileImageView.setBackgroundColor(Color.RED)
+//        profileImageView.setBackgroundColor(Color.RED)    // 背景色指定
+        Glide.with(context).load(article.user.profileImageUrl).into(profileImageView)   // Glideで画像指定
     }
 }
