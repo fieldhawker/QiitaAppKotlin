@@ -25,6 +25,7 @@
             android:name=".ArticleListActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ArticleActivity" />
+        <activity android:name=".WatchActivity" />
 
     </application>
 
