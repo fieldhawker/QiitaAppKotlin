@@ -17,6 +17,8 @@ class MainActivity : RxAppCompatActivity() {
         val moveButton = findViewById(R.id.move_button) as Button
         // ストップウォッチボタン
         val watchButton = findViewById(R.id.watch_button) as Button
+        // センサーボタン
+        val sensorButton = findViewById(R.id.sensor_button) as Button
 
         // 移動ボタン
         moveButton.setOnClickListener{
@@ -30,6 +32,15 @@ class MainActivity : RxAppCompatActivity() {
         // ストップウォッチボタン
         watchButton.setOnClickListener{
             val intent: Intent = Intent(this, WatchActivity::class.java)
+            intent.putExtra("number", 120)
+            intent.putExtra("string", "The message from MainActivity")
+
+            // 新しくアクティビティを開く
+            startActivityForResult(intent, MY_REQUEST_CODE)
+        }
+        // センサーボタン
+        sensorButton.setOnClickListener{
+            val intent: Intent = Intent(this, SensorActivity::class.java)
             intent.putExtra("number", 120)
             intent.putExtra("string", "The message from MainActivity")
 
