@@ -27,6 +27,7 @@
         <activity android:name=".ArticleActivity" />
         <activity android:name=".WatchActivity" />
         <activity android:name=".SensorActivity" />
+        <activity android:name=".activity.MoveViewActivity" />
 
     </application>
 
