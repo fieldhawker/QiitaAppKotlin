@@ -14,6 +14,8 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.view.MotionEvent
+
 
 class SensorActivity : AppCompatActivity(), SensorEventListener {
 
@@ -21,12 +23,11 @@ class SensorActivity : AppCompatActivity(), SensorEventListener {
     private var mAccelerometer: Sensor? = null
 
     var size = Point()
+    val pictureSize = 50
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sensor)
-
-        val picture_size = 50
 
 
         // 画面の中央を求める？
@@ -54,8 +55,8 @@ class SensorActivity : AppCompatActivity(), SensorEventListener {
         imageView.setTag("imageView")
         imageView.setImageResource(R.drawable.android_logo)
 
-        val imageWidth = picture_size
-        val imageHeight = picture_size
+        val imageWidth = pictureSize
+        val imageHeight = pictureSize
         imageView.layoutParams = LinearLayout.LayoutParams(imageWidth, imageHeight)
         imageView.x = centerX.toFloat()
         imageView.y = centerY.toFloat()
@@ -75,7 +76,7 @@ class SensorActivity : AppCompatActivity(), SensorEventListener {
         super.onResume()
         if (mAccelerometer != null) {
             mSensorManager?.registerListener(this, mAccelerometer,
-                    SensorManager.SENSOR_DELAY_NORMAL)
+                    SensorManager.SENSOR_DELAY_GAME) // SENSOR_DELAY_NORMAL
         }
     }
 
@@ -89,9 +90,7 @@ class SensorActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
 
-        val margin_x = 100
-        val margin_y = 200
-
+        val coe = 2 // 移動係数
 
         // ビューオブジェクトを取得
         val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
@@ -103,28 +102,35 @@ class SensorActivity : AppCompatActivity(), SensorEventListener {
 
         if (event.sensor == mAccelerometer) {
 
+            Log.d("display_size_x", size.x.toString())
+            Log.d("display_size_y", size.y.toString())
+
             Log.d("0", event.values[0].toString())
             Log.d("1", event.values[1].toString())
             Log.d("2", event.values[2].toString())
 
-            val x = event.values[0]
-            val y = event.values[1]
-            val z = event.values[2]
+            val x = coe * event.values[0]
+            val y = coe * event.values[1]
+            val z = coe * event.values[2]
 
-            if (size.x - margin_x > imageView.x && imageView.x > margin_x)
+            val x_over = ((size.x - imageView.x) < pictureSize)
+            val x_under = ((size.x - imageView.x) > (size.x - pictureSize))
+            val y_over = ((size.y - imageView.y) < pictureSize * 3)
+            val y_under = ((size.y - imageView.y) > (size.y - pictureSize))
+
+            if (!x_over && !x_under)
                 imageView.x -= x
-            else if (size.x - margin_x <= imageView.x && 0 > x)
+            else if (x_over && 0 < x)
                 imageView.x -= x
-            else if (imageView.x <= margin_x && x > 0)
+            else if (x_under && x < 0)
                 imageView.x -= x
 
-            if (size.y - margin_y > imageView.y && imageView.y > margin_y)
+            if (!y_over && !y_under)
                 imageView.y += y
-            else if (size.y - margin_y <= imageView.y && 0 > y)
+            else if (y_over && y < 0)
                 imageView.y += y
-            else if (imageView.y <= margin_y && y > 0)
+            else if (y_under && 0 < y)
                 imageView.y += y
-
 
             zText.text = z.toString()
 
@@ -144,4 +150,20 @@ class SensorActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+
+    override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
+
+        when (motionEvent.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // ビューオブジェクトを取得
+                val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
+                val imageView = constraintLayout.findViewWithTag("imageView") as ImageView
+
+                // タップした位置に移動
+                imageView.x = motionEvent.x
+                imageView.y = motionEvent.y
+            }
+        }
+        return false
+    }
 }
