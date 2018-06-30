@@ -25,7 +25,7 @@
                 tools:text="orientation.azimuth : " />
 
             <TextView
-                android:id="@+id/azimuthText"
+                android:id="@+id/xText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -48,7 +48,7 @@
                 tools:text="orientation.pitch : " />
 
             <TextView
-                android:id="@+id/pitchText"
+                android:id="@+id/yText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -71,7 +71,7 @@
                 tools:text="orientation.roll : " />
 
             <TextView
-                android:id="@+id/rollText"
+                android:id="@+id/zText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"

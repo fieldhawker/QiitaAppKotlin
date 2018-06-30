@@ -34,4 +34,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Viewの移動" />
+
+    <Button
+        android:id="@+id/camera_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="カメラ起動" />
 </LinearLayout>

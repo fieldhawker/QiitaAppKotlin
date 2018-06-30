@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import android.content.Intent
-import com.product.hawker.qiitaappkotlin.activity.MoveViewActivity
+import com.product.hawker.qiitaappkotlin.activity.*
 
 const val MY_REQUEST_CODE = 0
 
@@ -22,6 +22,8 @@ class MainActivity : RxAppCompatActivity() {
         val sensorButton = findViewById(R.id.sensor_button) as Button
         // Viewの移動ボタン
         val moveViewButton = findViewById(R.id.move_view_button) as Button
+        // カメラボタン
+        val cameraButton = findViewById(R.id.camera_button) as Button
 
         // 移動ボタン
         moveButton.setOnClickListener{
@@ -53,6 +55,15 @@ class MainActivity : RxAppCompatActivity() {
         // Viewの移動ボタン
         moveViewButton.setOnClickListener{
             val intent: Intent = Intent(this, MoveViewActivity::class.java)
+            intent.putExtra("number", 120)
+            intent.putExtra("string", "The message from MainActivity")
+
+            // 新しくアクティビティを開く
+            startActivityForResult(intent, MY_REQUEST_CODE)
+        }
+        // カメラボタン
+        cameraButton.setOnClickListener{
+            val intent: Intent = Intent(this, CameraActivity::class.java)
             intent.putExtra("number", 120)
             intent.putExtra("string", "The message from MainActivity")
 
