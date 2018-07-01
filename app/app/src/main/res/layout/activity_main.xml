@@ -40,4 +40,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="カメラ起動" />
+
+    <Button
+        android:id="@+id/maps_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="地図起動" />
 </LinearLayout>

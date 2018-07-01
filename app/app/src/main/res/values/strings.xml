@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">TKN_Qiita_App</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyCiiJFlcXW0cA4ZRAiyYAdZAHeI_pI7Pi0</string>
+
 </resources>

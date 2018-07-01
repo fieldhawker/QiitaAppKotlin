@@ -24,6 +24,8 @@ class MainActivity : RxAppCompatActivity() {
         val moveViewButton = findViewById(R.id.move_view_button) as Button
         // カメラボタン
         val cameraButton = findViewById(R.id.camera_button) as Button
+        // 地図ボタン
+        val mapsButton = findViewById(R.id.maps_button) as Button
 
         // 移動ボタン
         moveButton.setOnClickListener{
@@ -64,6 +66,15 @@ class MainActivity : RxAppCompatActivity() {
         // カメラボタン
         cameraButton.setOnClickListener{
             val intent: Intent = Intent(this, CameraActivity::class.java)
+            intent.putExtra("number", 120)
+            intent.putExtra("string", "The message from MainActivity")
+
+            // 新しくアクティビティを開く
+            startActivityForResult(intent, MY_REQUEST_CODE)
+        }
+        // 地図ボタン
+        mapsButton.setOnClickListener{
+            val intent: Intent = Intent(this, MapsActivity::class.java)
             intent.putExtra("number", 120)
             intent.putExtra("string", "The message from MainActivity")
 
