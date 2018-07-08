@@ -57,7 +57,7 @@ class SensorGameFragment : Fragment(), SensorEventListener {
 
     val handler = Handler()
     var timeValue = 0
-    var runnable: Runnable?= null
+    var runnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +79,6 @@ class SensorGameFragment : Fragment(), SensorEventListener {
                 .setAudioAttributes(audioAttributes)
                 .build()
         soundId = soundPool!!.load(this.context, R.raw.fall02, 1)
-
 
 
     }
@@ -135,12 +134,6 @@ class SensorGameFragment : Fragment(), SensorEventListener {
         }
 
         handler.post(runnable)
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
 
 
         // 画面の中央を求める？
@@ -236,6 +229,13 @@ class SensorGameFragment : Fragment(), SensorEventListener {
 
         constraintLayout.addView(imageView3)
 
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+
 //        constraintLayout.addView(imageView2)
 
 
@@ -250,12 +250,19 @@ class SensorGameFragment : Fragment(), SensorEventListener {
         }
 
 
-
     }
 
     public override fun onStop() {
         super.onStop()
         mSensorManager?.unregisterListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        soundPool!!.unload(soundId)
+        soundPool!!.release()
+
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -310,11 +317,11 @@ class SensorGameFragment : Fragment(), SensorEventListener {
             else if (y_under && 0 < y)
                 imageView.y += y
 
-            zText.text = z.toString()
 
             // 移動量
-            xText.text = x.toString()
-            yText.text = y.toString()
+            azimuthText.text = x.toString()
+            pitchText.text = y.toString()
+            rollText.text = z.toString()
 //            Log.d("move_x", x.toString())
 //            Log.d("move_y", y.toString())
 
@@ -379,7 +386,7 @@ class SensorGameFragment : Fragment(), SensorEventListener {
             val h = time / 3600
             val m = time % 3600 / 60
             val s = time % 60
-            "%1$02d:%2$02d:%3$02d".format(h,m,s)
+            "%1$02d:%2$02d:%3$02d".format(h, m, s)
         }
     }
 //    override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
