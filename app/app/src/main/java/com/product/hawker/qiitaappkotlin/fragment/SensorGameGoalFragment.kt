@@ -5,11 +5,22 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.product.hawker.qiitaappkotlin.R
+import java.util.*
+
+//import android.provider.ContactsContract.Directory.PACKAGE_NAME
+
+
+
+
+
 
 
 class SensorGameGoalFragment : Fragment() {
+
+    val packageName = "com.product.hawker.qiitaappkotlin"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +37,21 @@ class SensorGameGoalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // TextViewをひも付けます
-        val mTextView = view.findViewById<View>(R.id.textTitleView) as TextView
+        val textTitleView = view.findViewById<View>(R.id.textTitleView) as TextView
+        // imageViewをひも付けます
+        val imageView = view.findViewById<View>(R.id.imageView3) as ImageView
+
+        val rand = Random()
+        val img_no = "img%03d".format(rand.nextInt(14))
+
+        val rid = resources.getIdentifier(img_no, "drawable", packageName)
+        imageView.setImageResource(rid)
+
+        val bundle = arguments
+        val timeValue = bundle!!.getInt("timeValue").toString()
+        val buybooks = getString(R.string.sensor_game_goal_text, timeValue)
+        textTitleView.text = buybooks
+
         // Buttonのクリックした時の処理を書きます
         view.findViewById<View>(R.id.start_botton).setOnClickListener {
 

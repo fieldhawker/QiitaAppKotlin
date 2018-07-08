@@ -9,6 +9,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -33,16 +35,18 @@ class SensorGameFragment : Fragment(), SensorEventListener {
 
     private var mTextView: TextView? = null
 
-
+    // 傾き検知
     private var mSensorManager: SensorManager? = null
     private var mAccelerometer: Sensor? = null
 
+    private var soundPool: SoundPool? = null
+    private var soundId = 0
 
-    var size = Point()
-    val pictureSize = 32
-    val goalSize = 64
-    var x_goal = 0
-    var y_goal = 0
+    var size = Point()          // ディスプレイサイズ
+    val pictureSize = 32        // ボールのサイズ
+    val goalSize = 64 //1000    // ゴールのサイズ
+    var x_goal = 0              // ゴールの開始位置X
+    var y_goal = 0              // ゴールの開始位置Y
 
     var margin_left = 0
     var margin_right = 0
@@ -52,7 +56,8 @@ class SensorGameFragment : Fragment(), SensorEventListener {
     var isGoal = false
 
     val handler = Handler()
-    private var wait_time = true
+    var timeValue = 0
+    var runnable: Runnable?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +70,16 @@ class SensorGameFragment : Fragment(), SensorEventListener {
 //            // int型で背景色を受け取る
 //            mBackgroundColor = args.getInt(KEY_BACKGROUND, Color.TRANSPARENT)
 //        }
+
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+        soundPool = SoundPool.Builder()
+                .setAudioAttributes(audioAttributes)
+                .build()
+        soundId = soundPool!!.load(this.context, R.raw.fall02, 1)
+
 
 
     }
@@ -93,6 +108,7 @@ class SensorGameFragment : Fragment(), SensorEventListener {
             val fragment = SensorGameFragment()
             // Fragmentの追加や削除といった変更を行う際は、Transactionを利用します
             val fragmentManager = fragmentManager
+
             val transaction = fragmentManager?.beginTransaction()
             // 新しく追加を行うのでaddを使用します
             // 他にも、よく使う操作で、replace removeといったメソッドがあります
@@ -105,6 +121,20 @@ class SensorGameFragment : Fragment(), SensorEventListener {
 //            mTextView?.setText("ボタンを押したよ")
         }
 
+        val timeText = view.findViewById(R.id.timeText) as TextView
+        // 計測
+        runnable = object : Runnable {
+            override fun run() {
+                timeValue++
+
+                timeToText(timeValue)?.let {
+                    timeText.text = it
+                }
+                handler.postDelayed(this, 1000)
+            }
+        }
+
+        handler.post(runnable)
 
     }
 
@@ -220,6 +250,7 @@ class SensorGameFragment : Fragment(), SensorEventListener {
         }
 
 
+
     }
 
     public override fun onStop() {
@@ -294,24 +325,33 @@ class SensorGameFragment : Fragment(), SensorEventListener {
 //            Log.d("position_x", imageView.x.toString())
 //            Log.d("position_y", imageView.y.toString())
 
-            Log.d("goal_x", (x_goal + pictureSize + goalSize).toString())
-            Log.d("goal_y", (y_goal + pictureSize + goalSize).toString())
+            Log.d("goal_x", (x_goal + goalSize).toString())
+            Log.d("goal_y", (y_goal + goalSize).toString())
 
-            if ((x_goal <= imageView.x && imageView.x <= (x_goal + pictureSize + goalSize)) && (y_goal <= imageView.y && imageView.y <= (y_goal + pictureSize + goalSize))) {
+            if ((x_goal <= imageView.x && imageView.x <= (x_goal + goalSize)) && (y_goal <= imageView.y && imageView.y <= (y_goal + goalSize))) {
 
                 if (isGoal) {
                     // 何もしない
                 } else {
+
+                    handler.removeCallbacks(runnable)
+
+                    soundPool!!.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f)
 
 //                    Toast.makeText(getActivity(), "ゴールに入りました。", Toast.LENGTH_LONG).show()
                     Log.d("position_x", imageView.x.toString())
                     Log.d("position_y", imageView.y.toString())
                     Log.d("goal", "ゴールに入りました。")
 
+
+                    val bundle = Bundle()
+                    bundle.putInt("timeValue", timeValue)
+
                     // Fragmentを作成します
                     val fragment = SensorGameGoalFragment()
                     // Fragmentの追加や削除といった変更を行う際は、Transactionを利用します
                     val fragmentManager = fragmentManager
+                    fragment.setArguments(bundle)
                     val transaction = fragmentManager?.beginTransaction()
                     // 新しく追加を行うのでaddを使用します
                     // 他にも、よく使う操作で、replace removeといったメソッドがあります
@@ -329,7 +369,19 @@ class SensorGameFragment : Fragment(), SensorEventListener {
         }
     }
 
+    private fun timeToText(time: Int = 0): String? {
 
+        return if (time < 0) {
+            null
+        } else if (time == 0) {
+            "00:00:00"
+        } else {
+            val h = time / 3600
+            val m = time % 3600 / 60
+            val s = time % 60
+            "%1$02d:%2$02d:%3$02d".format(h,m,s)
+        }
+    }
 //    override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
 //
 //        when (motionEvent.action) {

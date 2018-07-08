@@ -16,6 +16,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.view.MotionEvent
 import com.product.hawker.qiitaappkotlin.fragment.SensorGameStartFragment
+import com.product.hawker.qiitaappkotlin.service.BgmService
+
+
 
 
 
@@ -23,8 +26,11 @@ import com.product.hawker.qiitaappkotlin.fragment.SensorGameStartFragment
 //class SensorGameActivity : AppCompatActivity(), SensorEventListener {
     class SensorGameActivity : AppCompatActivity() {
 
+
     private var mSensorManager: SensorManager? = null
     private var mAccelerometer: Sensor? = null
+
+    private var bgm: BgmService? = null
 
     var size = Point()
     val pictureSize = 50
@@ -32,6 +38,8 @@ import com.product.hawker.qiitaappkotlin.fragment.SensorGameStartFragment
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sensor_game)
+
+        bgm = BgmService(this)
 
         // Fragmentを作成します
         val fragment = SensorGameStartFragment()
@@ -87,13 +95,18 @@ import com.product.hawker.qiitaappkotlin.fragment.SensorGameStartFragment
 
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        if (mAccelerometer != null) {
-//            mSensorManager?.registerListener(this, mAccelerometer,
-//                    SensorManager.SENSOR_DELAY_GAME) // SENSOR_DELAY_NORMAL
-//        }
-//    }
+    override fun onResume() {
+        super.onResume()
+        //BGMの再生
+        bgm?.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //BGMの再生
+        bgm?.stop()
+    }
+
 //
 //    public override fun onStop() {
 //        super.onStop()
