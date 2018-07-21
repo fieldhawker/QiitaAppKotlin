@@ -28,6 +28,8 @@ class MainActivity : RxAppCompatActivity() {
         val mapsButton = findViewById(R.id.maps_button) as Button
         // センサーゲームボタン
         val sensorGameButton = findViewById(R.id.sensor_game_button) as Button
+        // たまる君ボタン
+        val tamaruButton = findViewById(R.id.tamaru_button) as Button
 
         // 移動ボタン
         moveButton.setOnClickListener{
@@ -86,6 +88,15 @@ class MainActivity : RxAppCompatActivity() {
         // センサーゲームボタン
         sensorGameButton.setOnClickListener{
             val intent: Intent = Intent(this, SensorGameActivity::class.java)
+            intent.putExtra("number", 120)
+            intent.putExtra("string", "The message from MainActivity")
+
+            // 新しくアクティビティを開く
+            startActivityForResult(intent, MY_REQUEST_CODE)
+        }
+        // たまる君ボタン
+        tamaruButton.setOnClickListener{
+            val intent: Intent = Intent(this, TamaruActivity::class.java)
             intent.putExtra("number", 120)
             intent.putExtra("string", "The message from MainActivity")
 

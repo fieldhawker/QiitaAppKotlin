@@ -45,6 +45,7 @@
         <activity
             android:name=".SensorGameActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.TamaruActivity" />
     </application>
 
 </manifest>
